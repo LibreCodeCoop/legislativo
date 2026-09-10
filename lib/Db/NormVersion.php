@@ -1,0 +1,7 @@
+<?php
+declare(strict_types=1);
+namespace OCA\Legislativo\Db;
+use OCP\AppFramework\Db\Entity;
+use OCP\DB\Types;
+/** @method int getId() @method void setNormId(int $v) @method int getNormId() @method void setLabel(string $v) @method string getLabel() @method void setValidFrom(\DateTime $v) @method \DateTime getValidFrom() @method void setValidUntil(?\DateTime $v) @method ?\DateTime getValidUntil() @method void setBodyHtml(string $v) @method string getBodyHtml() @method void setChecksum(string $v) @method string getChecksum() @method void setCreatedBy(string $v) @method string getCreatedBy() @method void setCreatedAt(\DateTime $v) @method \DateTime getCreatedAt() */
+class NormVersion extends Entity { protected int $normId=0; protected string $label=''; protected ?\DateTime $validFrom=null; protected ?\DateTime $validUntil=null; protected string $bodyHtml=''; protected string $checksum=''; protected string $createdBy=''; protected ?\DateTime $createdAt=null; public function __construct(){foreach(['id','normId']as$f)$this->addType($f,Types::INTEGER);foreach(['validFrom','validUntil']as$f)$this->addType($f,Types::DATE);$this->addType('createdAt',Types::DATETIME);} public function jsonSerialize():array{return['id'=>$this->getId(),'normId'=>$this->getNormId(),'label'=>$this->getLabel(),'validFrom'=>$this->getValidFrom()->format('Y-m-d'),'validUntil'=>$this->getValidUntil()?->format('Y-m-d'),'bodyHtml'=>$this->getBodyHtml(),'checksum'=>$this->getChecksum(),'createdBy'=>$this->getCreatedBy(),'createdAt'=>$this->getCreatedAt()->format(DATE_ATOM)];} }

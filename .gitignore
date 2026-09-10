@@ -1,0 +1,7 @@
+/graphify-out/
+/vendor/
+/node_modules/
+/build/
+/dist/
+/.phpunit.result.cache
+/composer.phar
