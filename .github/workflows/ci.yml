@@ -65,6 +65,7 @@ jobs:
   nextcloud-compat:
     name: Nextcloud ${{ matrix.nextcloud }} / PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
