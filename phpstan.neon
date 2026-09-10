@@ -12,6 +12,7 @@ parameters:
         - lib/Exception/
         - tests/Unit/
     ignoreErrors:
-        - '#^Method OCA\\Legislativo\\Db\\[A-Za-z]+Mapper::#'
+        - '#has no value type specified in iterable type array#'
+        - '#with no value type specified in iterable type array#'
         - '#^PHPDoc tag @return#'
     reportUnmatchedIgnoredErrors: false
