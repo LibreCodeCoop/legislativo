@@ -69,11 +69,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - nextcloud: 'stable32'
+          - nextcloud: 'latest-32'
             php: '8.1'
-          - nextcloud: 'stable33'
+          - nextcloud: 'latest-33'
             php: '8.2'
-          - nextcloud: 'stable35'
+          - nextcloud: 'latest-34'
             php: '8.3'
     services:
       postgres:
@@ -100,7 +100,8 @@ jobs:
 
       - name: Setup Nextcloud
         run: |
-          curl -sSL "https://download.nextcloud.com/server/releases/${{ matrix.nextcloud }}.tar.bz2" | tar xj
+          curl -sSL "https://download.nextcloud.com/server/releases/${{ matrix.nextcloud }}.tar.bz2" -o nextcloud.tar.bz2
+          tar xjf nextcloud.tar.bz2
           cd nextcloud
           php occ maintenance:install \
             --admin-user admin --admin-pass admin \
@@ -112,5 +113,4 @@ jobs:
           php nextcloud/occ app:enable legislativo
 
       - name: Verify installation
-        run: |
-          php nextcloud/occ migrations:status legislativo
+        run: php nextcloud/occ migrations:status legislativo
