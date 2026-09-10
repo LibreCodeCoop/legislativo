@@ -1,0 +1,18 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
+parameters:
+    level: 6
+    paths:
+        - lib/Service/MatterValidator.php
+        - lib/Service/TextNormalizer.php
+        - lib/Service/DeadlineCalculator.php
+        - lib/Service/DeadlineStatusCalculator.php
+        - lib/Service/AuditClientParser.php
+        - lib/Exception/
+        - tests/Unit/
+    ignoreErrors:
+        - '#has no value type specified in iterable type array#'
+        - '#with no value type specified in iterable type array#'
+        - '#^PHPDoc tag @return#'
+    reportUnmatchedIgnoredErrors: false
