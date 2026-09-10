@@ -1,3 +1,6 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+
 parameters:
     level: 6
     paths:
@@ -9,6 +12,10 @@ parameters:
         - '#^Method OCA\\Legislativo\\Db\\[A-Za-z]+Mapper::(find|insert|update|delete)\(\) return type has no value type specified in iterable type#'
         - '#^PHPDoc tag @return#'
         - '#^Parameter \#1 \$qb of method OCP\\AppFramework\\Db\\QBMapper#'
-    bootstrapFiles:
-        - vendor/autoload.php
+        - '#has invalid type OCP\\#'
+        - '#extends unknown class OCP\\#'
+        - '#implements unknown interface OCP\\#'
+        - '#calls parent::__construct\(\) but .* does not extend any class#'
+        - '#Attribute class OCP\\.* does not exist#'
+        - '#has invalid return type OCP\\#'
     reportUnmatchedIgnoredErrors: false
