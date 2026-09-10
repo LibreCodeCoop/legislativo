@@ -1,0 +1,14 @@
+parameters:
+    level: 6
+    paths:
+        - lib/
+        - tests/
+    excludePaths:
+        - lib/Migration/
+    ignoreErrors:
+        - '#^Method OCA\\Legislativo\\Db\\[A-Za-z]+Mapper::(find|insert|update|delete)\(\) return type has no value type specified in iterable type#'
+        - '#^PHPDoc tag @return#'
+        - '#^Parameter \#1 \$qb of method OCP\\AppFramework\\Db\\QBMapper#'
+    bootstrapFiles:
+        - vendor/autoload.php
+    reportUnmatchedIgnoredErrors: false
