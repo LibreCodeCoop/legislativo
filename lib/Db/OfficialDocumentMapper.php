@@ -70,4 +70,19 @@ class OfficialDocumentMapper extends QBMapper {
 
 		return ((int) $maximum) + 1;
 	}
+
+	public function issueDraft(OfficialDocument $document, string $uid, \DateTime $issuedAt): bool {
+		$qb = $this->db->getQueryBuilder();
+		$affected = $qb->update($this->getTableName())
+			->set('number', $qb->createNamedParameter($this->nextNumber($document->getKind(), $document->getYear()), IQueryBuilder::PARAM_INT))
+			->set('status', $qb->createNamedParameter('issued'))
+			->set('issued_by', $qb->createNamedParameter($uid))
+			->set('issued_at', $qb->createNamedParameter($issuedAt, IQueryBuilder::PARAM_DATETIME))
+			->set('updated_at', $qb->createNamedParameter($issuedAt, IQueryBuilder::PARAM_DATETIME))
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($document->getId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('status', $qb->createNamedParameter('draft')))
+			->executeStatement();
+
+		return $affected === 1;
+	}
 }

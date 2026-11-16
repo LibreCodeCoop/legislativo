@@ -86,12 +86,10 @@ class OfficialDocumentService {
 
 		$this->db->beginTransaction();
 		try {
-			$document->setNumber($this->documents->nextNumber($document->getKind(), $document->getYear()));
-			$document->setStatus('issued');
-			$document->setIssuedBy($uid);
-			$document->setIssuedAt($now);
-			$document->setUpdatedAt($now);
-			$updated = $this->documents->update($document);
+			if (!$this->documents->issueDraft($document, $uid, $now)) {
+				throw new ValidationException('O documento já foi emitido por outro operador.');
+			}
+			$updated = $this->documents->find($id);
 			$this->audit->record($uid, 'official_document', $id, 'official_document.issue', $before, $updated->jsonSerialize());
 			$this->db->commit();
 		} catch (\Throwable $exception) {
