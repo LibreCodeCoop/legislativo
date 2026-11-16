@@ -44,6 +44,12 @@ class DashboardController extends Controller {
 			'description' => 'Transparência ativa e publicação dos dados legislativos.',
 			'status' => 'functional',
 		],
+		[
+			'id' => 'documentos_oficiais',
+			'name' => 'Documentos oficiais',
+			'description' => 'Memorandos, ofícios eletrônicos e circulares numerados e auditáveis.',
+			'status' => 'functional',
+		],
 	];
 
 	public function __construct(
@@ -62,7 +68,7 @@ class DashboardController extends Controller {
 
 		return new TemplateResponse(Application::APP_ID, 'dashboard', [
 			'modules' => self::MODULES,
-			'version' => '0.16.0',
+			'version' => '0.17.0',
 			'canWrite' => $this->authorization->canWrite(),
 			'canPreside' => $this->authorization->canPreside(),
 		]);
@@ -73,7 +79,7 @@ class DashboardController extends Controller {
 		return new DataResponse([
 			'ok' => true,
 			'app' => Application::APP_ID,
-			'version' => '0.16.0',
+			'version' => '0.17.0',
 			'modules' => self::MODULES,
 		]);
 	}

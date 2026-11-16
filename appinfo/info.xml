@@ -8,7 +8,7 @@
 Núcleo de gestão legislativa para protocolo, tramitação, sessões, votações,
 legislação consolidada e publicação no portal institucional.
 	]]></description>
-	<version>0.16.0</version>
+	<version>0.17.0</version>
 	<licence>agpl</licence>
 	<author homepage="https://librecode.coop">LibreCode</author>
 	<namespace>Legislativo</namespace>

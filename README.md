@@ -1,6 +1,6 @@
 # Gestão Legislativa para Nextcloud
 
-Versão 0.16.0: inclui fluxo documental, votação eletrônica, cadastro de parlamentares, fila de oradores, cronômetro sincronizado, painel público, editor versionado da ata, assinatura da ata no LibreSign, portal público acessível com vereadores e busca global, legislação consolidada, importação CSV em lote, tramitação para múltiplos destinatários, painel de prazos, consulta detalhada da auditoria e busca avançada tolerante a acentos e plurais.
+Versão 0.17.0: inclui memorandos, ofícios eletrônicos e circulares, além do fluxo documental, votação eletrônica, cadastro de parlamentares, painel público, legislação consolidada, tramitação para múltiplos destinatários, painel de prazos e auditoria detalhada.
 
 O servidor precisa de Ghostscript (`gs`) para o carimbo e LibreOffice (`libreoffice` ou `soffice`) para converter DOCX. Arquivos PDF não dependem do LibreOffice. O LibreSign deve estar habilitado e o operador precisa pertencer a um grupo autorizado em `groups_request_sign`.
 
@@ -38,6 +38,7 @@ Esta versão cria:
 - busca global pública integrada para matérias, normas, sessões e vereadores;
 - perfis públicos sanitizados dos vereadores, com mandato, partido, cadeira e proposições de autoria em URL compartilhável;
 - portal com alto contraste, controle de tamanho do texto, atalho para conteúdo, foco visível e navegação de abas por teclado;
+- módulo de memorandos, ofícios eletrônicos e circulares, com rascunho, destinatários, numeração independente por tipo/ano, emissão imutável e auditoria;
 
 O modelo de arquivo está em [docs/modelo-normas.csv](docs/modelo-normas.csv). No painel interno, abra **Legislação**, cole o conteúdo do CSV, execute **Validar prévia** e só então use **Importar lote**.
 - matriz de aderência e plano de implementação orientado pela prova de conceito.
@@ -71,6 +72,9 @@ Os demais usuários autenticados permanecem em modo de consulta.
 | `GET` | `/api/v1/deadlines` | Consulta prazos em aberto, vencidos, a vencer ou concluídos |
 | `PUT` | `/api/v1/proceedings/{id}` | Conclui uma tramitação com resultado e auditoria |
 | `GET` | `/api/v1/audit` | Consulta privilegiada da auditoria com filtros e contexto do cliente |
+| `GET/POST` | `/api/v1/official-documents` | Pesquisa ou cria rascunhos de memorandos, ofícios e circulares |
+| `GET/PUT` | `/api/v1/official-documents/{id}` | Consulta ou altera um rascunho de documento oficial |
+| `POST` | `/api/v1/official-documents/{id}/issue` | Emite e numera definitivamente o documento oficial |
 | `GET/POST` | `/api/v1/sessions` | Lista ou cria sessões plenárias |
 | `POST` | `/api/v1/sessions/{id}/attendance` | Registra presença parlamentar |
 | `POST` | `/api/v1/sessions/{id}/agenda` | Adiciona matéria à pauta |

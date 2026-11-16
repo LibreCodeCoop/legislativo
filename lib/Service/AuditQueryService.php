@@ -13,7 +13,7 @@ use OCA\Legislativo\Db\AuditEntryMapper;
 use OCA\Legislativo\Exception\ValidationException;
 
 class AuditQueryService {
-	private const ENTITY_TYPES = ['matter', 'session', 'norm', 'calendar', 'parliamentarian'];
+	private const ENTITY_TYPES = ['matter', 'official_document', 'session', 'norm', 'calendar', 'parliamentarian'];
 	private \DateTimeZone $utc;
 
 	public function __construct(
