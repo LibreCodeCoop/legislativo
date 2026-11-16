@@ -222,6 +222,34 @@
 .legislativo-document-flow small { display: block; margin: 3px 0 0; }
 .legislativo-error-text { color: var(--color-error-text); }
 
+.legislativo-official-document-form {
+	margin-bottom: 18px;
+	padding: 18px;
+	border: 1px solid var(--color-border);
+	border-radius: 12px;
+	background: var(--color-background-hover);
+}
+
+.legislativo-official-document-form footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 14px;
+}
+
+.legislativo-official-document-preview {
+	margin-top: 8px;
+}
+
+.legislativo-official-document-preview summary {
+	cursor: pointer;
+	font-weight: 650;
+}
+
+.legislativo-official-document-preview p {
+	white-space: pre-wrap;
+}
+
 .legislativo-search-form {
 	display: grid;
 	flex: 1;

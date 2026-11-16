@@ -8,6 +8,9 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 ## [Não publicado]
 
 ### Adicionado
+- Módulo de memorandos, ofícios eletrônicos e circulares
+- Numeração automática independente por tipo e ano, emissão imutável e trilha de auditoria
+- API e interface administrativa para pesquisar, criar, editar e emitir documentos oficiais
 - `composer.json` com autoload PSR-4 e dependências de desenvolvimento
 - PHPUnit 10 com configuração `phpunit.xml` e testes unitários migrados
 - PHPStan nível 6 para análise estática

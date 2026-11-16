@@ -89,6 +89,7 @@ Esta matriz é de engenharia, não um parecer jurídico. A aceitação depende d
 ## Sequência de implementação recomendada
 
 1. **Vertical de matéria e protocolo (demonstrável):** cadastro, numeração, anexos do Nextcloud, triagem, timeline, auditoria, consulta e calendário de prazos implementados.
+   **Comunicação administrativa:** memorandos, ofícios eletrônicos e circulares possuem cadastro, destinatários, numeração por tipo/ano, emissão imutável e auditoria; geração de PDF e assinatura LibreSign ficam como integração posterior.
 2. **Sessão demonstrável:** pauta, presença, quórum, votação em tempo real, painel e ata automática.
 3. **Legislação:** importação das cerca de 400 normas, relações, HTML estruturado, versões e busca.
 4. **Portal público:** vereador, proposições, sessões, licitações, contas, acessibilidade e manifestações.

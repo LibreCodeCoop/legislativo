@@ -9,6 +9,7 @@ parameters:
         - lib/Service/DeadlineCalculator.php
         - lib/Service/DeadlineStatusCalculator.php
         - lib/Service/AuditClientParser.php
+        - lib/Service/OfficialDocumentValidator.php
         - lib/Exception/
         - tests/Unit/
     ignoreErrors:

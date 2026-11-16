@@ -655,6 +655,60 @@ if (canPreside && session.status === 'open') { var timerForm = document.createEl
 		function importNorms(dryRun) { var form = document.getElementById('legislativo-norm-import-form'); var result = document.getElementById('legislativo-norm-import-result'); var csv = form.elements.csv.value; if (!csv.trim()) { setFeedback('Cole o CSV antes de importar.', 'error'); return; } result.hidden = false; result.textContent = dryRun ? 'Validando prévia…' : 'Importando lote…'; api('/norms/import', { method: 'POST', body: { csv: csv, dryRun: dryRun } }).then(function (payload) { var data = payload.data; result.textContent = (dryRun ? 'Prévia concluída. ' : 'Importação concluída. ') + data.imported + ' norma(s) processada(s), ' + data.skipped + ' duplicata(s), ' + data.errors.length + ' erro(s).'; if (data.errors.length) result.textContent += ' Linhas: ' + data.errors.map(function (error) { return error.line + ' (' + error.message + ')'; }).join('; '); if (!dryRun) loadNorms(); }).catch(function (error) { result.textContent = error.message; setFeedback(error.message, 'error'); }); }
 		document.querySelector('[data-norm-import-preview]').addEventListener('click', function () { importNorms(true); }); document.querySelector('[data-norm-import-apply]').addEventListener('click', function () { if (window.confirm('Importar este lote e gravar as normas válidas?')) importNorms(false); });
 
+		var officialDocumentDialog = document.getElementById('legislativo-official-document-dialog');
+		var officialDocumentForm = document.getElementById('legislativo-official-document-form');
+		var officialDocumentKinds = { memorandum: 'Memorando', official_letter: 'Ofício', circular: 'Circular' };
+		function resetOfficialDocumentForm() {
+			officialDocumentForm.reset();
+			officialDocumentForm.elements.id.value = '';
+			officialDocumentForm.elements.year.value = new Date().getFullYear();
+		}
+		function editOfficialDocument(documentData) {
+			officialDocumentForm.elements.id.value = documentData.id;
+			officialDocumentForm.elements.kind.value = documentData.kind;
+			officialDocumentForm.elements.year.value = documentData.year;
+			officialDocumentForm.elements.subject.value = documentData.subject;
+			officialDocumentForm.elements.recipients.value = (documentData.recipients || []).join('\n');
+			officialDocumentForm.elements.body.value = documentData.body;
+			officialDocumentForm.elements.subject.focus();
+		}
+		function loadOfficialDocuments() {
+			var list = document.getElementById('legislativo-official-document-list');
+			var params = new URLSearchParams(new FormData(document.getElementById('legislativo-official-document-filter')));
+			list.replaceChildren(el('p', 'legislativo-empty', 'Carregando…'));
+			return api('/official-documents?' + params.toString()).then(function (payload) {
+				list.replaceChildren();
+				(payload.data || []).forEach(function (documentData) {
+					var row = el('article', 'legislativo-management-row');
+					var content = el('div');
+					var identifier = documentData.number ? ' nº ' + documentData.number + '/' + documentData.year : ' · rascunho de ' + documentData.year;
+					content.appendChild(el('strong', '', officialDocumentKinds[documentData.kind] + identifier + ' · ' + documentData.subject));
+					content.appendChild(el('p', '', (documentData.recipients || []).join(', ') + (documentData.issuedAt ? ' · emitido em ' + formatDate(documentData.issuedAt, true) : '')));
+					var preview = el('details', 'legislativo-official-document-preview'); preview.appendChild(el('summary', '', 'Ver conteúdo')); preview.appendChild(el('p', '', documentData.body)); content.appendChild(preview);
+					row.appendChild(content);
+					if (documentData.status === 'draft') {
+						var actions = el('div', 'legislativo-detail-actions');
+						var edit = el('button', 'button', 'Editar'); edit.type = 'button'; edit.addEventListener('click', function () { editOfficialDocument(documentData); }); actions.appendChild(edit);
+						var issue = el('button', 'primary', 'Emitir'); issue.type = 'button'; issue.addEventListener('click', function () {
+							if (!window.confirm('Emitir este documento? Após a numeração, o conteúdo não poderá ser alterado.')) return;
+							api('/official-documents/' + documentData.id + '/issue', { method: 'POST' }).then(function () { setFeedback('Documento emitido e numerado.', 'success'); return loadOfficialDocuments(); }).catch(function (error) { setFeedback(error.message, 'error'); });
+						}); actions.appendChild(issue); row.appendChild(actions);
+					}
+					list.appendChild(row);
+				});
+				if (!(payload.data || []).length) list.appendChild(el('p', 'legislativo-empty', 'Nenhum documento encontrado.'));
+			});
+		}
+		document.getElementById('legislativo-open-official-documents').addEventListener('click', function () { resetOfficialDocumentForm(); officialDocumentDialog.showModal(); loadOfficialDocuments(); });
+		document.getElementById('legislativo-official-document-filter').addEventListener('submit', function (event) { event.preventDefault(); loadOfficialDocuments().catch(function (error) { setFeedback(error.message, 'error'); }); });
+		document.getElementById('legislativo-official-document-clear').addEventListener('click', resetOfficialDocumentForm);
+		officialDocumentForm.addEventListener('submit', function (event) {
+			event.preventDefault();
+			var data = formData(officialDocumentForm); var id = data.id; delete data.id;
+			data.recipients = (data.recipients || '').split(/[;\n]+/).map(function (value) { return value.trim(); }).filter(Boolean);
+			api('/official-documents' + (id ? '/' + id : ''), { method: id ? 'PUT' : 'POST', body: data }).then(function () { resetOfficialDocumentForm(); setFeedback(id ? 'Rascunho atualizado.' : 'Rascunho criado.', 'success'); return loadOfficialDocuments(); }).catch(function (error) { setFeedback(error.message, 'error'); });
+		});
+
 		function auditDataBlock(label, value) {
 			var section = el('section', 'legislativo-audit-data');
 			section.appendChild(el('h4', '', label));

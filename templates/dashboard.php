@@ -64,6 +64,7 @@ $version = (string)($_['version'] ?? '');
 			<?php if ($canWrite): ?>
 				<button id="legislativo-open-audit" type="button" class="button">Auditoria</button>
 				<button id="legislativo-open-norms" type="button" class="button">Legislação</button>
+				<button id="legislativo-open-official-documents" type="button" class="button">Documentos oficiais</button>
 				<button id="legislativo-open-triage" type="button" class="button">Triagem</button>
 				<button id="legislativo-open-calendar" type="button" class="button">Calendário</button>
 				<button id="legislativo-new-matter" type="button" class="primary">Nova matéria</button>
@@ -243,10 +244,32 @@ $version = (string)($_['version'] ?? '');
 		<form id="legislativo-norm-version-form" class="legislativo-inline-form" hidden><input name="normId" type="hidden"><input name="label" required placeholder="Versão original"><input name="validFrom" required type="date"><input name="validUntil" type="date"><textarea name="bodyHtml" required placeholder="Texto HTML da norma"></textarea><button class="button" type="submit">Adicionar versão</button></form>
 		<section class="legislativo-norm-import"><h3>Importar normas em lote</h3><p class="legislativo-form-help">CSV UTF-8 com as colunas <code>type,number,year,title,ementa,status,body_html,version_label,valid_from,valid_until</code>. Primeiro valide a prévia; somente o botão de importação grava dados.</p><form id="legislativo-norm-import-form"><textarea name="csv" rows="7" required placeholder="type,number,year,title,ementa,status,body_html,version_label,valid_from,valid_until&#10;Lei,1,2026,Título da norma,Ementa,published,&lt;p&gt;Art. 1º...&lt;/p&gt;,Texto original,2026-01-01,"></textarea><div class="legislativo-detail-actions"><button class="button" type="button" data-norm-import-preview>Validar prévia</button><button class="primary" type="button" data-norm-import-apply>Importar lote</button></div></form><div id="legislativo-norm-import-result" class="legislativo-form-help" hidden></div></section>
 	</dialog>
+	<dialog id="legislativo-official-document-dialog" class="legislativo-dialog legislativo-dialog--wide">
+		<header><div><p class="legislativo-eyebrow">Comunicação administrativa</p><h2>Memorandos, ofícios e circulares</h2></div><button type="button" class="legislativo-dialog-close" data-close-dialog aria-label="Fechar">×</button></header>
+		<form id="legislativo-official-document-filter" class="legislativo-inline-form legislativo-search-filter">
+			<input name="query" type="search" placeholder="Assunto ou conteúdo">
+			<select name="kind"><option value="">Todos os tipos</option><option value="memorandum">Memorando</option><option value="official_letter">Ofício</option><option value="circular">Circular</option></select>
+			<select name="status"><option value="">Todas as situações</option><option value="draft">Rascunho</option><option value="issued">Emitido</option></select>
+			<input name="year" type="number" min="1900" max="2200" placeholder="Ano">
+			<button class="button" type="submit">Pesquisar</button>
+		</form>
+		<form id="legislativo-official-document-form" class="legislativo-official-document-form">
+			<input name="id" type="hidden">
+			<div class="legislativo-form-grid">
+				<label>Tipo <select name="kind" required><option value="memorandum">Memorando</option><option value="official_letter">Ofício eletrônico</option><option value="circular">Circular</option></select></label>
+				<label>Ano <input name="year" type="number" min="1900" max="2200" required></label>
+				<label class="legislativo-span-2">Assunto <input name="subject" maxlength="512" required></label>
+				<label class="legislativo-span-2">Destinatários <textarea name="recipients" rows="2" maxlength="25600" required placeholder="Um destinatário por linha ou separado por ponto e vírgula"></textarea></label>
+				<label class="legislativo-span-2">Conteúdo <textarea name="body" rows="8" maxlength="200000" required></textarea></label>
+			</div>
+			<footer><button id="legislativo-official-document-clear" type="button" class="button">Limpar</button><button type="submit" class="primary">Salvar rascunho</button></footer>
+		</form>
+		<div id="legislativo-official-document-list" class="legislativo-management-list" aria-live="polite"><p class="legislativo-empty">Carregando…</p></div>
+	</dialog>
 	<dialog id="legislativo-audit-dialog" class="legislativo-dialog legislativo-dialog--wide">
 		<header><div><p class="legislativo-eyebrow">Rastreabilidade</p><h2>Auditoria do sistema</h2></div><button type="button" class="legislativo-dialog-close" data-close-dialog aria-label="Fechar">×</button></header>
 		<form id="legislativo-audit-filter" class="legislativo-inline-form legislativo-audit-filter">
-			<label>Módulo <select name="entityType"><option value="">Todos</option><option value="matter">Matérias</option><option value="session">Sessões</option><option value="norm">Normas</option><option value="calendar">Calendário</option><option value="parliamentarian">Parlamentares</option></select></label>
+			<label>Módulo <select name="entityType"><option value="">Todos</option><option value="matter">Matérias</option><option value="official_document">Documentos oficiais</option><option value="session">Sessões</option><option value="norm">Normas</option><option value="calendar">Calendário</option><option value="parliamentarian">Parlamentares</option></select></label>
 			<label>ID da entidade <input name="entityId" type="number" min="1"></label>
 			<label>Ação <input name="action" maxlength="64" placeholder="matter.update"></label>
 			<label>Usuário <input name="userUid" maxlength="64"></label>
